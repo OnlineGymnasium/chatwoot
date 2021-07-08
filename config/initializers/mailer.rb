@@ -5,7 +5,7 @@ Rails.application.configure do
 
   config.action_mailer.delivery_method = :smtp
   # We need the application frontend url to be used in our emails
-  config.action_mailer.default_url_options = { host: ENV['FRONTEND_URL'] } if ENV['FRONTEND_URL'].present?
+  config.action_mailer.default_url_options = { host: 'localhost:3000' }
   # We load certain mailer templates from our database. This ensures changes to it is reflected immediately
   config.action_mailer.perform_caching = false
   config.action_mailer.perform_deliveries = true
@@ -13,16 +13,16 @@ Rails.application.configure do
 
   # Config related to smtp
   smtp_settings = {
-    address: ENV.fetch('SMTP_ADDRESS', 'localhost'),
+    address: ENV.fetch('SMTP_ADDRESS', 'smtp-relay.gmail.com'),
     port: ENV.fetch('SMTP_PORT', 587)
   }
 
   smtp_settings[:authentication] = ENV.fetch('SMTP_AUTHENTICATION', 'login').to_sym if ENV['SMTP_AUTHENTICATION'].present?
-  smtp_settings[:domain] = ENV['SMTP_DOMAIN'] if ENV['SMTP_DOMAIN'].present?
-  smtp_settings[:user_name] = ENV['SMTP_USERNAME']
-  smtp_settings[:password] = ENV['SMTP_PASSWORD']
+  smtp_settings[:domain] = 'gmail.com'
+  smtp_settings[:user_name] = 'margulan0702@gmail.com'
+  smtp_settings[:password] = 'koketate777'
   smtp_settings[:enable_starttls_auto] = ActiveModel::Type::Boolean.new.cast(ENV.fetch('SMTP_ENABLE_STARTTLS_AUTO', true))
-  smtp_settings[:openssl_verify_mode] = ENV['SMTP_OPENSSL_VERIFY_MODE'] if ENV['SMTP_OPENSSL_VERIFY_MODE'].present?
+  smtp_settings[:openssl_verify_mode] = 'NONE'
   smtp_settings[:ssl] = ActiveModel::Type::Boolean.new.cast(ENV.fetch('SMTP_SSL', true)) if ENV['SMTP_SSL']
   smtp_settings[:tls] = ActiveModel::Type::Boolean.new.cast(ENV.fetch('SMTP_TLS', true)) if ENV['SMTP_TLS']
 

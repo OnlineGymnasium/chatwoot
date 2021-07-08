@@ -274,6 +274,26 @@ const actions = {
       throw new Error(error);
     }
   },
+
+  getProjects: async ({ commit }) => {
+    try {
+      const response = await ConversationApi.getProjects();
+      commit(types.default.GET_PROJECTS, response.data);
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+
+  sendJiraTicket: async (_, ticket) => {
+    try {
+      const response = await ConversationApi.sendJiraTicket(ticket);
+      debugger
+      commit(types.default.SEND_JIRA_TICKET, response);
+      debugger
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
 };
 
 export default actions;

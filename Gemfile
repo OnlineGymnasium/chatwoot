@@ -153,3 +153,6 @@ group :development, :test do
   gem 'spring-watcher-listen'
   gem 'webmock'
 end
+
+gem 'httparty'
+gem 'jira-ruby'

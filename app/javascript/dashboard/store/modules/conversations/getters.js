@@ -63,6 +63,14 @@ const getters = {
   },
   getChatStatusFilter: ({ chatStatusFilter }) => chatStatusFilter,
   getSelectedInbox: ({ currentInbox }) => currentInbox,
+
+  getProjects: (state) => {
+    return state.jiraProjects.projectsArray;
+  },
+
+  getJiraTicketResponse: (state) => {
+    return state.jiraResponse.jiraTicketResponse;
+  }
 };
 
 export default getters;

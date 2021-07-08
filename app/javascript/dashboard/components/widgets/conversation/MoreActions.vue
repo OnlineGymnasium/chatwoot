@@ -19,6 +19,11 @@
       :class="{ 'dropdown-pane--open': showConversationActions }"
     >
       <woot-dropdown-menu>
+        <woot-dropdown-item>
+          <button class="button clear alert " @click="sendTicketToJira">
+            <span>Отправить тикет в Jira</span>
+          </button>
+        </woot-dropdown-item>
         <woot-dropdown-item v-if="!currentChat.muted">
           <button class="button clear alert " @click="mute">
             <span>{{ $t('CONTACT_PANEL.MUTE_CONTACT') }}</span>
@@ -42,6 +47,12 @@
       :current-chat="currentChat"
       @cancel="toggleEmailActionsModal"
     />
+    <jira-ticket-modal
+      v-if="showJiraTicketModal"
+      :show="showJiraTicketModal"
+      :current-chat="currentChat"
+      @cancel="sendTicketToJira"
+    />
   </div>
 </template>
 <script>
@@ -49,6 +60,7 @@ import { mapGetters } from 'vuex';
 import { mixin as clickaway } from 'vue-clickaway';
 import alertMixin from 'shared/mixins/alertMixin';
 import EmailTranscriptModal from './EmailTranscriptModal';
+import JiraTicketModal from './JiraTicketModal';
 import ResolveAction from '../../buttons/ResolveAction';
 import WootDropdownItem from 'shared/components/ui/dropdown/DropdownItem.vue';
 import WootDropdownMenu from 'shared/components/ui/dropdown/DropdownMenu.vue';
@@ -58,6 +70,7 @@ export default {
     WootDropdownMenu,
     WootDropdownItem,
     EmailTranscriptModal,
+    JiraTicketModal,
     ResolveAction,
   },
   mixins: [alertMixin, clickaway],
@@ -65,6 +78,7 @@ export default {
     return {
       showConversationActions: false,
       showEmailActionsModal: false,
+      showJiraTicketModal: false,
     };
   },
   computed: {
@@ -73,6 +87,10 @@ export default {
     }),
   },
   methods: {
+    sendTicketToJira() {
+      this.showJiraTicketModal = !this.showJiraTicketModal;
+      this.hideConversationActions();
+    },
     mute() {
       this.$store.dispatch('muteConversation', this.currentChat.id);
       this.showAlert(this.$t('CONTACT_PANEL.MUTED_SUCCESS'));

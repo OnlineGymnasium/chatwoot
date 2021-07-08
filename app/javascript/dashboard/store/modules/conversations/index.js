@@ -12,6 +12,8 @@ const state = {
   listLoadingStatus: true,
   chatStatusFilter: wootConstants.STATUS_TYPE.OPEN,
   currentInbox: null,
+  jiraProjects: [],
+  jiraResponse: "",
   selectedChatId: null,
 };
 
@@ -175,6 +177,23 @@ export const mutations = {
     if (chat) {
       Vue.set(chat, 'can_reply', canReply);
     }
+  },
+
+  // JIRA
+  [types.default.GET_PROJECTS](
+    _state, 
+    data
+  ) {
+    Vue.set(_state.jiraProjects, 'projectsArray', data);
+  },
+
+  [types.default.SEND_JIRA_TICKET](
+    _state, 
+    data
+  ) {
+    debugger
+    Vue.set(_state.jiraResponse, 'jiraTicketResponse', data);
+    debugger
   },
 };
 
