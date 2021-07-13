@@ -284,12 +284,10 @@ const actions = {
     }
   },
 
-  sendJiraTicket: async (_, ticket) => {
+  sendJiraTicket: async ({ commit }, ticket) => {
     try {
       const response = await ConversationApi.sendJiraTicket(ticket);
-      debugger
       commit(types.default.SEND_JIRA_TICKET, response);
-      debugger
     } catch (error) {
       throw new Error(error);
     }

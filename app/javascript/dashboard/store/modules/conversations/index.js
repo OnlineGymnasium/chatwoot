@@ -13,7 +13,7 @@ const state = {
   chatStatusFilter: wootConstants.STATUS_TYPE.OPEN,
   currentInbox: null,
   jiraProjects: [],
-  jiraResponse: "",
+  jiraResponse: {},
   selectedChatId: null,
 };
 
@@ -191,9 +191,7 @@ export const mutations = {
     _state, 
     data
   ) {
-    debugger
     Vue.set(_state.jiraResponse, 'jiraTicketResponse', data);
-    debugger
   },
 };
 

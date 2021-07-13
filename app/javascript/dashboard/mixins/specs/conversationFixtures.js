@@ -29,7 +29,7 @@ export default {
     },
     id: 5815,
     projectsArray: [],
-    jiraTicketResponse: "",
+    jiraTicketResponse: {},
     messages: [
       {
         id: 438072,

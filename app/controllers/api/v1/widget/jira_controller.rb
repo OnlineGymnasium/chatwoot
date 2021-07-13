@@ -24,20 +24,6 @@ class Api::V1::Widget::JiraController < ApplicationController
     render json: @res
   end
 
-  def get_operating_system(user_agent)
-    if request.env['HTTP_USER_AGENT'].downcase.match(/mac/i)
-      return "Mac"
-    elsif request.env['HTTP_USER_AGENT'].downcase.match(/windows/i)
-      return "Windows"
-    elsif request.env['HTTP_USER_AGENT'].downcase.match(/linux/i)
-      return "Linux"
-    elsif request.env['HTTP_USER_AGENT'].downcase.match(/unix/i)
-      return "Unix"
-    else
-      return "Unknown"
-    end
-  end
-
   def send_ticket
     email = 'solano.lifan3@bk.ru'
     headers = {
@@ -45,10 +31,8 @@ class Api::V1::Widget::JiraController < ApplicationController
       "Content-Type" => 'application/json',
     }
 
-    browser = request.headers['HTTP_USER_AGENT']
-
-    description = params[:ticket][:username].to_s + "; " + params[:ticket][:email].to_s + "; " + browser + "; " + self.get_operating_system(browser)
-    + "; " + params[:ticket][:message].to_s + "; " + params[:ticket][:first_appeal_date].to_s + "; " + params[:ticket][:dialog_category].to_s + "; "
+    description = params[:ticket][:username].to_s + "; " + params[:ticket][:email].to_s + "; " + params[:ticket][:browser].to_s
+    + "; " + params[:ticket][:message].to_s + "; " + params[:ticket][:first_appeal].to_s + "; " + params[:ticket][:dialog_category].to_s + "; "
     + params[:ticket][:begin_link].to_s
     
     data = {
@@ -63,10 +47,11 @@ class Api::V1::Widget::JiraController < ApplicationController
         }
         # :username => params[:ticket][:username],
         # :email => params[:ticket][:email],
-        # :browser => browser,
-        # :OS => self.get_operating_system(browser),
+        # :browser => params[:ticket][:browser],
+        # :OS => params[:ticket][:os],
         # :message => params[:ticket][:message],
-        # :first_appeal_date => params[:ticket][:first_appeal_date],
+        # :messages => params[:ticket][:messages],
+        # :first_appeal => params[:ticket][:first_appeal],
         # :dialog_category => params[:ticket][:dialog_category],
         # :begin_link => params[:ticket][:begin_link]
       }
@@ -76,7 +61,11 @@ class Api::V1::Widget::JiraController < ApplicationController
     
     @res = response.body
     
-    render json: @res
+    if response.code == 201
+      render json: @res
+    else
+      render :json => {}, :status => :bad_request
+    end
   end
   
   private
