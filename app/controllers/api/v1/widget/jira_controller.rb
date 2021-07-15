@@ -6,9 +6,10 @@ class Api::V1::Widget::JiraController < ApplicationController
   protect_from_forgery with: :null_session
 
   def get_project
-    email = 'solano.lifan3@bk.ru'
+    email = ENV.fetch('JIRA_USERNAME', 'aAZAZA')
+    token = ENV.fetch('JIRA_API_TOKEN', '')
     headers = {
-      "Authorization" => 'Basic ' + Base64.encode64(email + ':5iWsuY2MrQF6TPLWQDdL46EB'),
+      "Authorization" => 'Basic ' + Base64.encode64(email + ':' + token),
       "Accept" => 'application/json',
       "ContentType" => 'application/json',
     }
@@ -25,9 +26,10 @@ class Api::V1::Widget::JiraController < ApplicationController
   end
 
   def send_ticket
-    email = 'solano.lifan3@bk.ru'
+    email = ENV['JIRA_USERNAME']
+    token = ENV['JIRA_API_TOKEN']
     headers = {
-      "Authorization" => 'Basic ' + Base64.encode64(email + ':5iWsuY2MrQF6TPLWQDdL46EB'),
+      "Authorization" => 'Basic ' + Base64.encode64(email + ':' + token),
       "Content-Type" => 'application/json',
     }
 
@@ -38,13 +40,16 @@ class Api::V1::Widget::JiraController < ApplicationController
     data = {
       :fields => {
         :project => {
+          # Project key can be obtained via get_project controller action above
           :key => params[:ticket][:projectKey]
         },
         :summary => "REST ye merry gentlemen.",
         :description => description,
         :issuetype => {
+          # You need to create issue type on your Jira project, e.g. Task
           :name => "Task"
         }
+        # Custom fields (if created)
         # :username => params[:ticket][:username],
         # :email => params[:ticket][:email],
         # :browser => params[:ticket][:browser],
