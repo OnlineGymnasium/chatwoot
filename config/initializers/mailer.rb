@@ -23,7 +23,7 @@ Rails.application.configure do
   smtp_settings[:password] = ENV.fetch('SMTP_PASSWORD', '')
   smtp_settings[:enable_starttls_auto] = ActiveModel::Type::Boolean.new.cast(ENV.fetch('SMTP_ENABLE_STARTTLS_AUTO', true))
   smtp_settings[:openssl_verify_mode] = 'NONE'
-  # smtp_settings[:ssl] = ActiveModel::Type::Boolean.new.cast(true)
+  smtp_settings[:ssl] = ActiveModel::Type::Boolean.new.cast(true)
   smtp_settings[:tls] = ActiveModel::Type::Boolean.new.cast(ENV.fetch('SMTP_TLS', true)) if ENV['SMTP_TLS']
 
   config.action_mailer.delivery_method = :smtp

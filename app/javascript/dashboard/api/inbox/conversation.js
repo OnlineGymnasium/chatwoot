@@ -81,11 +81,12 @@ class ConversationApi extends ApiClient {
   }
 
   getProjects() {
-    return axios.get('http://localhost:3000/api/v1/widget/jira/get_project');
+    return axios.get(`/api/v1/widget/jira/get_project`);
   }
 
   sendJiraTicket(ticket) {
-    return axios.post('http://localhost:3000/api/v1/widget/jira/send_ticket', {ticket});
+    
+    return axios.post(`/api/v1/widget/jira/send_ticket`, {ticket});
   }
 }
 

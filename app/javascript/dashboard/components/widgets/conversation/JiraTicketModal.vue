@@ -9,7 +9,7 @@
         <div class="medium-12 columns">
           <div>
             <label for="email">Email</label>
-            <input v-model="email" @input="$v.email.$touch" id="email" class="input" type="email" placeholder="Email">
+            <input v-model="currentChat.meta.sender.email" @input="$v.email.$touch" id="email" class="input" type="email" placeholder="Email">
           </div>
           <div>
             <label for="message">Сообщение</label>
@@ -91,6 +91,7 @@ export default {
     this.isLoading = true;
     try {
       this.$store.dispatch('getProjects');
+      this.setTicketObject();
     } catch (error) {
       this.showAlert(this.$t('EMAIL_TRANSCRIPT.SEND_EMAIL_ERROR'));
     } finally {
@@ -141,17 +142,7 @@ export default {
       return chat;
     },
     setTicketObject() {
-      //const { email: email, phone_number: phoneNumber, name } = this.contact;
-      //const additionalAttributes = this.contact.additional_attributes || {};
-      debugger;
-      this.username = username || '';
-      this.email = email || '';
-      this.browser = browser || '';
-      this.os = os || '';
-      this.message = message || '';
-      this.first_appeal = first_appeal || '';
-      this.dialog_category = dialog_category || '';
-      this.begin_link = begin_link || '';
+      this.email = this.currentChat.meta.sender.name || '';
     },
     getTicketObject() {
       return {
