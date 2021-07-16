@@ -142,7 +142,7 @@ export default {
       return chat;
     },
     setTicketObject() {
-      this.email = this.currentChat.meta.sender.name || '';
+      this.email = this.currentChat.meta.sender.email || '';
     },
     getTicketObject() {
       return {
