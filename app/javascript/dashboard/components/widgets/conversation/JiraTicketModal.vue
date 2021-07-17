@@ -89,7 +89,7 @@ export default {
   },
   mounted() {    
     this.isLoading = true;
-    debugger
+    
     try {
       this.$store.dispatch('getProjects');
       this.setTicketObject();
@@ -119,7 +119,7 @@ export default {
       const [chat] = this.allConversations.filter(
         c => c.id === this.currentChat.id
       );
-      debugger
+      
       return chat;
     },
     setTicketObject() {

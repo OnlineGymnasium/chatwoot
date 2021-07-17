@@ -61,7 +61,7 @@ class Api::V1::Widget::JiraController < ApplicationController
         :description => description,
         :issuetype => {
           # You need to create issue type on your Jira project, e.g. Task
-          :name => "Task"
+          :name => "Bug"
         }
         # Custom fields (if created)
         # :username => params[:ticket][:username],
