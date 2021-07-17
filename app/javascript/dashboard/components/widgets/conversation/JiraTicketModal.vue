@@ -9,7 +9,7 @@
         <div class="medium-12 columns">
           <div>
             <label for="email">Email</label>
-            <input v-model="currentChat.meta.sender.email" @input="$v.email.$touch" id="email" class="input" type="email" placeholder="Email">
+            <input v-model="email" @input="$v.email.$touch" id="email" class="input" type="email" placeholder="Email">
           </div>
           <div>
             <label for="message">Сообщение</label>
@@ -89,6 +89,7 @@ export default {
   },
   mounted() {    
     this.isLoading = true;
+    debugger
     try {
       this.$store.dispatch('getProjects');
       this.setTicketObject();
@@ -106,27 +107,6 @@ export default {
       currentChat: 'getSelectedChat',
       allConversations: 'getAllConversations',
     }),
-    /*getFormData() {
-      return {
-        email: this.email,
-        username: this.username,
-        browser: this.browser,
-        os: this.os,
-        message: this.message,
-        first_appeal: this.first_appeal,
-        dialog_category: this.dialog_category,
-        begin_link: this.begin_link,
-      };
-    }, */
-    /*isFormValid() {
-      if (this.selectedType) {
-        if (this.sentToOtherEmailAddress) {
-          return !!this.email && !this.$v.email.$error;
-        }
-        return true;
-      }
-      return false;
-    },*/
   },
   methods: {
     onCancel() {
@@ -139,6 +119,7 @@ export default {
       const [chat] = this.allConversations.filter(
         c => c.id === this.currentChat.id
       );
+      debugger
       return chat;
     },
     setTicketObject() {
@@ -146,7 +127,7 @@ export default {
     },
     getTicketObject() {
       return {
-        email: this.email,
+        email: this.email && this.email != "" ? this.email : this.currentChat.meta.sender.name,
         username: this.currentChat.meta.sender.name,
         browser: this.currentChat.additional_attributes.browser.browser_name,
         os: this.currentChat.additional_attributes.browser.platform_name,
@@ -168,11 +149,7 @@ export default {
         const saved = await this.$store.dispatch('sendJiraTicket', this.getTicketObject());
         this.onSuccess();
         this.showAlert("Тикет успешно отправлен в Jira!");
-        // if (saved && jiraTicketResponse == 200) {
-        //   debugger
-        //   this.onSuccess();
-        //   this.showAlert("Тикет успешно отправлен в Jira!");
-        // }
+        this.onCancel();
       } catch (error) {
         this.showAlert("Произошла ошибка!");
       }

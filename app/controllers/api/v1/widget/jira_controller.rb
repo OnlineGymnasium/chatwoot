@@ -33,9 +33,23 @@ class Api::V1::Widget::JiraController < ApplicationController
       "Content-Type" => 'application/json',
     }
 
-    description = params[:ticket][:username].to_s + "; " + params[:ticket][:email].to_s + "; " + params[:ticket][:browser].to_s
-    + "; " + params[:ticket][:message].to_s + "; " + params[:ticket][:first_appeal].to_s + "; " + params[:ticket][:dialog_category].to_s + "; "
-    + params[:ticket][:begin_link].to_s
+    sender_email = params[:ticket][:email].to_s
+    
+    if sender_email.empty?
+      sender_email = params[:ticket][:username].to_s
+    end
+
+    # getting a dialog history
+    dialog = ""
+    
+    params[:ticket][:messages]["messages"].each do |msg|
+      dialog += Time.at(msg["created_at"]).to_datetime.strftime("%b %d %r") + "\n" + msg["content"] + "\n"
+    end
+
+    description = "Chatwoot ID - " + params[:ticket][:username].to_s + ";\n Email - " + sender_email + ";\n Browser - " + \
+    + params[:ticket][:browser].to_s + ";\n Message - " + params[:ticket][:message].to_s + ";\n Initiated at - " + \
+    + params[:ticket][:first_appeal].to_s + ";\n Dialog category - " + params[:ticket][:dialog_category].to_s + \
+    + ";\n Initiated from - " + params[:ticket][:begin_link].to_s + ";\n Dialog:\n " + dialog
     
     data = {
       :fields => {
@@ -43,7 +57,7 @@ class Api::V1::Widget::JiraController < ApplicationController
           # Project key can be obtained via get_project controller action above
           :key => params[:ticket][:projectKey]
         },
-        :summary => "REST ye merry gentlemen.",
+        :summary => sender_email,
         :description => description,
         :issuetype => {
           # You need to create issue type on your Jira project, e.g. Task
@@ -81,6 +95,7 @@ class Api::V1::Widget::JiraController < ApplicationController
         :browser,
         :os,
         :message,
+        :messages,
         :first_appeal,
         :dialog_category,
         :begin_link,
