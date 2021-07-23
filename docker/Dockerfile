@@ -17,15 +17,15 @@ ENV BUNDLE_PATH="/gems"
 
 RUN apk update \
   && apk add \
-    openssl \
-    tar \
-    build-base \
-    tzdata \
-    postgresql-dev \
-    postgresql-client \
-    nodejs \
-    yarn \
-    git \
+  openssl \
+  tar \
+  build-base \
+  tzdata \
+  postgresql-dev \
+  postgresql-client \
+  nodejs \
+  yarn \
+  git \
   && mkdir -p /var/app \
   && gem install bundler
 
@@ -68,10 +68,11 @@ ENV RAILS_ENV ${RAILS_ENV}
 ENV BUNDLE_PATH="/gems"
 
 RUN apk add --update --no-cache \
-    openssl \
-    tzdata \
-    postgresql-client \
-    imagemagick \
+  openssl \
+  tzdata \
+  postgresql-client \
+  imagemagick \
+  git \
   && gem install bundler
 
 RUN if [ "$RAILS_ENV" = "production" ]; then \
