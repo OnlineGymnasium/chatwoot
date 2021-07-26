@@ -98,7 +98,7 @@ services:
 
   nginx:
     build:
-      context: ./nginx
+      context: .
       dockerfile: nginx/Dockerfile
     container_name: nginx
     restart: always
