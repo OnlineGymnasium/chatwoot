@@ -79,13 +79,14 @@ class Message < ApplicationRecord
   belongs_to :sender, polymorphic: true, required: false
 
   has_many :attachments, dependent: :destroy, autosave: true, before_add: :validate_attachments_limit
+  has_one :csat_survey_response, dependent: :destroy
 
   after_create :reopen_conversation,
                :notify_via_mail
 
   after_create_commit :execute_after_create_commit_callbacks
 
-  after_update :dispatch_update_event
+  after_update_commit :dispatch_update_event
 
   def channel_token
     @token ||= inbox.channel.try(:page_access_token)
@@ -163,7 +164,10 @@ class Message < ApplicationRecord
   end
 
   def reopen_conversation
-    conversation.open! if incoming? && conversation.resolved? && !conversation.muted?
+    return if conversation.muted?
+    return unless incoming?
+
+    conversation.open! if conversation.resolved? || conversation.snoozed?
   end
 
   def execute_message_template_hooks
