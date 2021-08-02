@@ -6,7 +6,8 @@ class Api::V1::Widget::JiraController < ApplicationController
   protect_from_forgery with: :null_session
 
   def get_project
-    email = ENV.fetch('JIRA_USERNAME', 'aAZAZA')
+    host_url = ENV.fetch('JIRA_HOST_URL', '')
+    email = ENV.fetch('JIRA_USERNAME', '')
     token = ENV.fetch('JIRA_API_TOKEN', '')
     headers = {
       "Authorization" => 'Basic ' + Base64.encode64(email + ':' + token),
@@ -18,7 +19,7 @@ class Api::V1::Widget::JiraController < ApplicationController
       
     }
 
-    response = HTTParty.get('https://lifanticket.atlassian.net/rest/api/2/project', :query => data, :headers => headers)
+    response = HTTParty.get(host_url + '/rest/api/2/project', :query => data, :headers => headers)
 
     @res = response.body
 
@@ -26,6 +27,7 @@ class Api::V1::Widget::JiraController < ApplicationController
   end
 
   def send_ticket
+    host_url = ENV['JIRA_HOST_URL']
     email = ENV['JIRA_USERNAME']
     token = ENV['JIRA_API_TOKEN']
     headers = {
@@ -76,7 +78,7 @@ class Api::V1::Widget::JiraController < ApplicationController
       }
     }
 
-    response = HTTParty.post('https://lifanticket.atlassian.net/rest/api/2/issue/', :body => data.to_json, :headers => headers)
+    response = HTTParty.post(host_url + '/rest/api/2/issue/', :body => data.to_json, :headers => headers)
     
     @res = response.body
     
