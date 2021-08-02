@@ -190,6 +190,29 @@ describe('#actions', () => {
     });
   });
 
+  describe('#getProjects', () => {
+    it('sends correct mutations if api is successful', async () => {
+      axios.get.mockResolvedValue({});
+      await actions.getProjects(
+        { commit }
+      );
+      expect(commit).toHaveBeenCalledTimes(0);
+      expect(commit.mock.calls).toEqual([]);
+    });
+  });
+
+  describe('#sendJiraTicket', () => {
+    it('sends correct mutations if api is successful', async () => {
+      axios.post.mockResolvedValue({});
+      await actions.sendJiraTicket(
+        { commit },
+        'azaza',
+      );
+      expect(commit).toHaveBeenCalledTimes(0);
+      expect(commit.mock.calls).toEqual([]);
+    });
+  });
+
   describe('#assignAgent', () => {
     it('sends correct mutations if assignment is successful', async () => {
       axios.post.mockResolvedValue({

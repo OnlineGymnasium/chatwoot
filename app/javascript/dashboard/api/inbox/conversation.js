@@ -80,6 +80,15 @@ class ConversationApi extends ApiClient {
   sendEmailTranscript({ conversationId, email }) {
     return axios.post(`${this.url}/${conversationId}/transcript`, { email });
   }
+
+  getProjects() {
+    return axios.get(`/api/v1/widget/jira/get_project`);
+  }
+
+  sendJiraTicket(ticket) {
+    
+    return axios.post(`/api/v1/widget/jira/send_ticket`, {ticket});
+  }
 }
 
 export default new ConversationApi();

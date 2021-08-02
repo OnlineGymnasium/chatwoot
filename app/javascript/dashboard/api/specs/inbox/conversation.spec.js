@@ -160,5 +160,16 @@ describe('#ConversationAPI', () => {
         }
       );
     });
+
+    it('#sendJiraTicket', () => {
+      debugger
+      conversationAPI.sendJiraTicket(ticket);
+      expect(context.axiosMock.post).toHaveBeenCalledWith(
+        '/api/v1/conversations/45/transcript',
+        {
+          email: 'john@acme.inc',
+        }
+      );
+    });
   });
 });

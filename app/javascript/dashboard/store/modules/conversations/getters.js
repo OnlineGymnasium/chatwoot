@@ -61,6 +61,13 @@ const getters = {
         chatMessage.private !== true
     ).length;
   },
+
+  getConversationById: _state => conversationId => {
+    return _state.allConversations.find(
+      value => value.id === Number(conversationId)
+    );
+  },
+
   getChatStatusFilter: ({ chatStatusFilter }) => chatStatusFilter,
   getSelectedInbox: ({ currentInbox }) => currentInbox,
   getConversationById: _state => conversationId => {
@@ -68,6 +75,14 @@ const getters = {
       value => value.id === Number(conversationId)
     );
   },
+
+  getProjects: (state) => {
+    return state.jiraProjects.projectsArray;
+  },
+
+  getJiraTicketResponse: (state) => {
+    return state.jiraResponse.jiraTicketResponse;
+  }
 };
 
 export default getters;

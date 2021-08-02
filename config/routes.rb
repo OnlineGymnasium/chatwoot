@@ -54,6 +54,7 @@ Rails.application.routes.draw do
           namespace :channels do
             resource :twilio_channel, only: [:create]
           end
+
           resources :conversations, only: [:index, :create, :show] do
             get 'meta', on: :collection
             get 'search', on: :collection
@@ -157,6 +158,12 @@ Rails.application.routes.draw do
         resources :campaigns, only: [:index]
         resources :events, only: [:create]
         resources :messages, only: [:index, :create, :update]
+        resources :jira do
+          collection do
+            get 'get_project', to: :get_project
+            post 'send_ticket', to: :send_ticket
+          end
+        end
         resources :conversations, only: [:index, :create] do
           collection do
             post :update_last_seen

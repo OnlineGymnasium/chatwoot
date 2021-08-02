@@ -13,6 +13,11 @@ class ApiClient {
     return `${this.baseUrl()}/${this.resource}`;
   }
 
+  get mainUrl() {
+    debugger
+    return window.location.host;
+  }
+
   baseUrl() {
     let url = this.apiVersion;
     if (this.options.accountScoped) {
