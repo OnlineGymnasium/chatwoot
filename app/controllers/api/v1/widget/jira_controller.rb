@@ -6,11 +6,11 @@ class Api::V1::Widget::JiraController < ApplicationController
   protect_from_forgery with: :null_session
 
   def get_project
-    host_url = ENV.fetch('JIRA_HOST_URL', '')
+    host_url = ENV.fetch('JIRA_ORGANIZATION_URL', '')
     email = ENV.fetch('JIRA_USERNAME', '')
     token = ENV.fetch('JIRA_API_TOKEN', '')
     headers = {
-      "Authorization" => 'Basic ' + Base64.encode64(email + ':' + token),
+      "Authorization" => 'Basic ' + Base64.strict_encode64(email + ':' + token),
       "Accept" => 'application/json',
       "ContentType" => 'application/json',
     }
@@ -27,11 +27,11 @@ class Api::V1::Widget::JiraController < ApplicationController
   end
 
   def send_ticket
-    host_url = ENV['JIRA_HOST_URL']
+    host_url = ENV['JIRA_ORGANIZATION_URL']
     email = ENV['JIRA_USERNAME']
     token = ENV['JIRA_API_TOKEN']
     headers = {
-      "Authorization" => 'Basic ' + Base64.encode64(email + ':' + token),
+      "Authorization" => 'Basic ' + Base64.strict_encode64(email + ':' + token),
       "Content-Type" => 'application/json',
     }
 
