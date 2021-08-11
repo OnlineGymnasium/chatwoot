@@ -119,7 +119,7 @@ export default {
       const [chat] = this.allConversations.filter(
         c => c.id === this.currentChat.id
       );
-      
+      debugger
       return chat;
     },
     setTicketObject() {

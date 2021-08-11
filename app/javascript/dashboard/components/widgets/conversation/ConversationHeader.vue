@@ -59,7 +59,16 @@
           <span slot="noResult">{{ $t('AGENT_MGMT.SEARCH.NO_RESULTS') }}</span>
         </multiselect>
       </div>
+      <button class="button clear alert " @click="sendTicketToJira">
+        Отправить тикет в Jira
+      </button>
       <more-actions :conversation-id="currentChat.id" />
+      <jira-ticket-modal
+        v-if="showJiraTicketModal"
+        :show="showJiraTicketModal"
+        :current-chat="currentChat"
+        @cancel="sendTicketToJira"
+      />
     </div>
   </div>
 </template>
@@ -68,12 +77,14 @@ import { mapGetters } from 'vuex';
 import MoreActions from './MoreActions';
 import Thumbnail from '../Thumbnail';
 import AvailabilityStatusBadge from '../conversation/AvailabilityStatusBadge';
+import JiraTicketModal from './JiraTicketModal';
 
 export default {
   components: {
     MoreActions,
     Thumbnail,
     AvailabilityStatusBadge,
+    JiraTicketModal,
   },
 
   props: {
@@ -90,6 +101,7 @@ export default {
   data() {
     return {
       currentChatAssignee: null,
+      showJiraTicketModal: false,
     };
   },
 
@@ -139,6 +151,13 @@ export default {
         });
     },
     removeAgent() {},
+    sendTicketToJira() {
+      this.showJiraTicketModal = !this.showJiraTicketModal;
+      this.hideConversationActions();
+    },
+    hideConversationActions() {
+      this.showConversationActions = false;
+    },
   },
 };
 </script>

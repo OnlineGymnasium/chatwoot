@@ -6,7 +6,8 @@ class Api::V1::Widget::JiraController < ApplicationController
   protect_from_forgery with: :null_session
 
   def get_project
-    email = ENV.fetch('JIRA_USERNAME', 'aAZAZA')
+    host_url = ENV.fetch('JIRA_HOST_URL', '')
+    email = ENV.fetch('JIRA_USERNAME', '')
     token = ENV.fetch('JIRA_API_TOKEN', '')
     headers = {
       "Authorization" => 'Basic ' + Base64.encode64(email + ':' + token),
@@ -18,7 +19,7 @@ class Api::V1::Widget::JiraController < ApplicationController
       
     }
 
-    response = HTTParty.get('https://lifanticket.atlassian.net/rest/api/2/project', :query => data, :headers => headers)
+    response = HTTParty.get(host_url + '/rest/api/2/project', :query => data, :headers => headers)
 
     @res = response.body
 
@@ -26,6 +27,7 @@ class Api::V1::Widget::JiraController < ApplicationController
   end
 
   def send_ticket
+    host_url = ENV['JIRA_HOST_URL']
     email = ENV['JIRA_USERNAME']
     token = ENV['JIRA_API_TOKEN']
     headers = {
@@ -43,13 +45,16 @@ class Api::V1::Widget::JiraController < ApplicationController
     dialog = ""
     
     params[:ticket][:messages]["messages"].each do |msg|
-      dialog += Time.at(msg["created_at"]).to_datetime.strftime("%b %d %r") + "\n" + msg["content"] + "\n"
+      if msg["message_type"] == 0 || msg["message_type"] == 1
+        sender = msg["sender"]["name"]
+        dialog += sender + " | " + Time.at(msg["created_at"]).to_datetime.strftime("%b %d %r") + "\n" + msg["content"] + "\n"
+      end
     end
 
-    description = "Chatwoot ID - " + params[:ticket][:username].to_s + ";\n Email - " + sender_email + ";\n Browser - " + \
-    + params[:ticket][:browser].to_s + ";\n Message - " + params[:ticket][:message].to_s + ";\n Initiated at - " + \
-    + params[:ticket][:first_appeal].to_s + ";\n Dialog category - " + params[:ticket][:dialog_category].to_s + \
-    + ";\n Initiated from - " + params[:ticket][:begin_link].to_s + ";\n Dialog:\n " + dialog
+    description = "Chatwoot ID - " + params[:ticket][:username].to_s + ";\n Email - " + sender_email + ";\n Браузер - " + \
+    + params[:ticket][:browser].to_s + ";\n Сообщение - " + params[:ticket][:message].to_s + ";\n Начато в - " + \
+    + params[:ticket][:first_appeal].to_s + ";\n Категория диалога - " + params[:ticket][:dialog_category].to_s + \
+    + ";\n Начато из - " + params[:ticket][:begin_link].to_s + ";\n Диалог:\n " + dialog
     
     data = {
       :fields => {
@@ -76,7 +81,7 @@ class Api::V1::Widget::JiraController < ApplicationController
       }
     }
 
-    response = HTTParty.post('https://lifanticket.atlassian.net/rest/api/2/issue/', :body => data.to_json, :headers => headers)
+    response = HTTParty.post(host_url + '/rest/api/2/issue/', :body => data.to_json, :headers => headers)
     
     @res = response.body
     
