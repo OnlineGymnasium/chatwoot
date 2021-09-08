@@ -7,13 +7,35 @@
       />
       <form @submit.prevent="onSubmit">
         <div class="medium-12 columns">
-          <div>
+          <div class="column">
             <label for="email">Email</label>
-            <input v-model="email" @input="$v.email.$touch" id="email" class="input" type="email" placeholder="Email">
+              <input 
+                v-model="email" 
+                @input="$v.email.$touch" 
+                id="email" 
+                class="input mb-1"
+                v-bind:class="{ danger: $v.email.$error }" 
+                type="email" 
+                placeholder="Email">
+              <span v-if="$v.email.$error" class="message mb-1">
+                {{ $t('EMAIL_TRANSCRIPT.FORM.EMAIL.ERROR') }}
+              </span>
           </div>
           <div>
             <label for="message">Сообщение</label>
-            <textarea v-model="message" @input="$v.message.$touch" id="message" class="input" type="text" placeholder="Сообщение" rows="4"></textarea>
+            <textarea 
+              v-model="message" 
+              @input="$v.message.$touch" 
+              id="message" 
+              class="input mb-1"
+              v-bind:class="{ danger: $v.message.$error }" 
+              type="text" 
+              placeholder="Сообщение" 
+              rows="4">
+            </textarea>
+            <span v-if="$v.message.$error" class="message mb-1">
+              Сообщение должно быть не короче 20 символов
+            </span>
           </div>
           <div>
             <label for="dialog_category">Категория диалога</label>
@@ -44,12 +66,24 @@
   </woot-modal>
 </template>
 
+<style scoped>
+  .mb-1 {
+    margin-bottom: 1rem !important;
+  }
+  .danger {
+    border-color: red;
+  }
+</style>
+
+</style>
 <script>
 import { mapGetters } from 'vuex';
+import { validationMixin } from 'vuelidate'
 import { required, minLength, email } from 'vuelidate/lib/validators';
 import alertMixin from 'shared/mixins/alertMixin';
+
 export default {
-  mixins: [alertMixin],
+  mixins: [alertMixin, validationMixin],
   props: {
     contact: {
       type: Object,
@@ -77,8 +111,14 @@ export default {
     };
   },
   validations: {
-    email: {},
-    message: {},
+    email: {
+      required,
+      email
+    },
+    message: {
+      required,
+      minLength: minLength(20)
+    },
     dialog_category: {},
   },
   
