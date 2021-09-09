@@ -9,37 +9,47 @@
         <div class="medium-12 columns">
           <div class="column">
             <label for="email">Email</label>
-              <input 
-                v-model="email" 
-                @input="$v.email.$touch" 
-                id="email" 
-                class="input mb-1"
-                v-bind:class="{ danger: $v.email.$error }" 
-                type="email" 
+              <input
+                v-model="email"
+                @blur="$v.email.$touch"
+                id="email"
+                class="input mb-4"
+                v-bind:class="{ danger: $v.email.$error }"
+                type="email"
                 placeholder="Email">
-              <span v-if="$v.email.$error" class="message mb-1">
+              <span v-if="$v.email.$error" class="message mb-6">
                 {{ $t('EMAIL_TRANSCRIPT.FORM.EMAIL.ERROR') }}
               </span>
           </div>
           <div>
             <label for="message">Сообщение</label>
-            <textarea 
-              v-model="message" 
-              @input="$v.message.$touch" 
-              id="message" 
-              class="input mb-1"
-              v-bind:class="{ danger: $v.message.$error }" 
-              type="text" 
-              placeholder="Сообщение" 
+            <textarea
+              v-model="message"
+              @blur="$v.message.$touch"
+              id="message"
+              class="input mb-4"
+              v-bind:class="{ danger: $v.message.$error }"
+              type="text"
+              placeholder="Сообщение"
               rows="4">
             </textarea>
-            <span v-if="$v.message.$error" class="message mb-1">
-              Сообщение должно быть не короче 20 символов
+            <span v-if="$v.message.$error" class="message mb-6">
+              Сообщение должно быть не короче 30 символов
             </span>
           </div>
           <div>
             <label for="dialog_category">Категория диалога</label>
-            <input v-model="dialog_category" @input="$v.dialog_category.$touch" id="dialog_category" class="input" type="text" placeholder="Категория диалога">
+            <input
+              v-model="dialog_category"
+              @blur="$v.dialog_category.$touch"
+              id="dialog_category"
+              class="input mb-4"
+              v-bind:class="{ danger: $v.dialog_category.$error }"
+              type="text"
+              placeholder="Категория диалога">
+              <span v-if="$v.dialog_category.$error" class="message mb-6">
+                Категория должна быть не короче 10 символов
+            </span>
           </div>
           <div>
             <label for="agent">Проекты</label>
@@ -54,7 +64,6 @@
           <div class="medium-12 row">
             <woot-submit-button
               :button-text="$t('EMAIL_TRANSCRIPT.SUBMIT')"
-              
             />
             <button class="button clear" @click.prevent="onCancel">
               {{ $t('EMAIL_TRANSCRIPT.CANCEL') }}
@@ -67,15 +76,17 @@
 </template>
 
 <style scoped>
-  .mb-1 {
+  .mb-4 {
     margin-bottom: 1rem !important;
+  }
+  .mb-6 {
+    margin-bottom: 1.5rem !important;
   }
   .danger {
     border-color: red;
   }
 </style>
 
-</style>
 <script>
 import { mapGetters } from 'vuex';
 import { validationMixin } from 'vuelidate'
@@ -93,7 +104,7 @@ export default {
       type: Boolean,
       default: false,
     },
-    
+
   },
   data() {
     return {
@@ -117,19 +128,23 @@ export default {
     },
     message: {
       required,
-      minLength: minLength(20)
+      // here you can change the minLength, also change in validation message above
+      minLength: minLength(30)
     },
-    dialog_category: {},
+    dialog_category: {
+      required,
+      minLength: minLength(10)
+    },
   },
-  
+
   watch: {
     contact() {
       this.setTicketObject();
     },
   },
-  mounted() {    
+  mounted() {
     this.isLoading = true;
-    
+
     try {
       this.$store.dispatch('getProjects');
       this.setTicketObject();
@@ -159,7 +174,7 @@ export default {
       const [chat] = this.allConversations.filter(
         c => c.id === this.currentChat.id
       );
-      
+
       return chat;
     },
     setTicketObject() {
@@ -185,14 +200,14 @@ export default {
       if (this.$v.$invalid) {
         return;
       }
-      try {
-        const saved = await this.$store.dispatch('sendJiraTicket', this.getTicketObject());
-        this.onSuccess();
-        this.showAlert("Тикет успешно отправлен в Jira!");
-        this.onCancel();
-      } catch (error) {
-        this.showAlert("Произошла ошибка!");
-      }
+      // try {
+      //   const saved = await this.$store.dispatch('sendJiraTicket', this.getTicketObject());
+      //   this.onSuccess();
+      //   this.showAlert("Тикет успешно отправлен в Jira!");
+      //   this.onCancel();
+      // } catch (error) {
+      //   this.showAlert("Произошла ошибка!");
+      // }
     },
   },
 };
