@@ -10,28 +10,30 @@
           <div class="column">
             <label for="email">Email</label>
               <input
-                v-model="email"
-                @blur="$v.email.$touch"
-                id="email"
-                class="input mb-4"
-                v-bind:class="{ danger: $v.email.$error }"
-                type="email"
-                placeholder="Email">
-              <span v-if="$v.email.$error" class="message mb-6">
-                {{ $t('EMAIL_TRANSCRIPT.FORM.EMAIL.ERROR') }}
-              </span>
+                  v-model="email"
+                  @blur="$v.email.$touch"
+                  id="email"
+                  class="input mb-4"
+                  v-bind:class="{ danger: $v.email.$error }"
+                  type="email"
+                  placeholder="Email"
+                >
+                <span v-if="$v.email.$error" class="message mb-6">
+                  {{ $t('EMAIL_TRANSCRIPT.FORM.EMAIL.ERROR') }}
+                </span>
           </div>
           <div>
             <label for="message">Сообщение</label>
             <textarea
-              v-model="message"
-              @blur="$v.message.$touch"
-              id="message"
-              class="input mb-4"
-              v-bind:class="{ danger: $v.message.$error }"
-              type="text"
-              placeholder="Сообщение"
-              rows="4">
+                v-model="message"
+                @blur="$v.message.$touch"
+                id="message"
+                class="input mb-4"
+                v-bind:class="{ danger: $v.message.$error }"
+                type="text"
+                placeholder="Сообщение"
+                rows="4"
+              >
             </textarea>
             <span v-if="$v.message.$error" class="message mb-6">
               Сообщение должно быть не короче 30 символов
@@ -46,15 +48,20 @@
               class="input mb-4"
               v-bind:class="{ danger: $v.dialog_category.$error }"
               type="text"
-              placeholder="Категория диалога">
-              <span v-if="$v.dialog_category.$error" class="message mb-6">
-                Категория должна быть не короче 10 символов
+              placeholder="Категория диалога"
+            >
+            <span v-if="$v.dialog_category.$error" class="message mb-6">
+              Категория должна быть не короче 10 символов
             </span>
           </div>
           <div>
             <label for="agent">Проекты</label>
-            <select v-model="selectedKey">
-              <option v-for="proj in projects" :value="proj.key">
+            <select v-model="selectedKey" required="true" >
+              <option 
+                v-for="(proj, index) in projects" 
+                v-bind:value="proj.key" 
+                v-bind:key=index
+              >
                 {{ proj.name }}
               </option>
             </select>
@@ -141,6 +148,9 @@ export default {
     contact() {
       this.setTicketObject();
     },
+    projects() {
+      this.setDefaultProject();
+    }
   },
   mounted() {
     this.isLoading = true;
@@ -161,7 +171,11 @@ export default {
       currentUser: 'getCurrentUser',
       currentChat: 'getSelectedChat',
       allConversations: 'getAllConversations',
+      activeInbox: 'getSelectedInbox',
     }),
+    inbox() {
+      return this.$store.getters['inboxes/getInbox'](this.activeInbox);
+    },
   },
   methods: {
     onCancel() {
@@ -194,20 +208,28 @@ export default {
         messages: this.getMessages(),
       };
     },
+    setDefaultProject() {
+      this.projects.forEach(({key, name}) => {
+        console.log(`key: ${key}, name: ${name}`)
+        if (this.inbox.name.trim().toLowerCase() == name.trim().toLowerCase()) {
+          this.selectedKey = key
+        }
+      })
+    },
     async onSubmit() {
       this.$v.$touch();
 
       if (this.$v.$invalid) {
         return;
       }
-      // try {
-      //   const saved = await this.$store.dispatch('sendJiraTicket', this.getTicketObject());
-      //   this.onSuccess();
-      //   this.showAlert("Тикет успешно отправлен в Jira!");
-      //   this.onCancel();
-      // } catch (error) {
-      //   this.showAlert("Произошла ошибка!");
-      // }
+      try {
+        const saved = await this.$store.dispatch('sendJiraTicket', this.getTicketObject());
+        this.onSuccess();
+        this.showAlert("Тикет успешно отправлен в Jira!");
+        this.onCancel();
+      } catch (error) {
+        this.showAlert("Произошла ошибка!");
+      }
     },
   },
 };
