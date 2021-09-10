@@ -150,11 +150,14 @@ export default {
     },
     projects() {
       this.setDefaultProject();
-    }
+    },
+    currentChat(){
+//      console.log("Currentchat watcher")
+      this.setTicketObject();
+    },
   },
   mounted() {
     this.isLoading = true;
-
     try {
       this.$store.dispatch('getProjects');
       this.setTicketObject();
@@ -176,6 +179,11 @@ export default {
     inbox() {
       return this.$store.getters['inboxes/getInbox'](this.activeInbox);
     },
+    currentContact(){
+        return this.$store.getters['contacts/getContact'](
+        this.currentChat.meta.sender.id
+      );
+      },
   },
   methods: {
     onCancel() {
@@ -192,7 +200,8 @@ export default {
       return chat;
     },
     setTicketObject() {
-      this.email = this.currentChat.meta.sender.email || '';
+      console.log("asd", this.currentContact.email)
+      this.email = this.currentContact.email || '';
     },
     getTicketObject() {
       return {
@@ -210,8 +219,7 @@ export default {
     },
     setDefaultProject() {
       this.projects.forEach(({key, name}) => {
-        console.log(`key: ${key}, name: ${name}`)
-        if (this.inbox.name.trim().toLowerCase() == name.trim().toLowerCase()) {
+        if (this.inbox?.name?.trim().toLowerCase() == name.trim().toLowerCase()) {
           this.selectedKey = key
         }
       })
