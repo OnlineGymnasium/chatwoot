@@ -56,7 +56,7 @@
           </div>
           <div>
             <label for="agent">Проекты</label>
-            <select v-model="selectedKey" required="true" >
+            <select v-model="selectedKey" required="true">
               <option 
                 v-for="(proj, index) in projects" 
                 v-bind:value="proj.key" 
@@ -175,12 +175,12 @@ export default {
       activeInbox: 'getSelectedInbox',
     }),
     inbox() {
-      return this.$store.getters['inboxes/getInbox'](this.activeInbox);
+      return this.$store.getters['inboxes/getInbox'](this.currentChat.inbox_id);
     },
     currentContact() {
-        return this.$store.getters['contacts/getContact'](
-        this.currentChat.meta.sender.id);
-      },
+      return this.$store.getters['contacts/getContact'](
+      this.currentChat.meta.sender.id);
+    },
   },
   methods: {
     onCancel() {
@@ -197,7 +197,6 @@ export default {
       return chat;
     },
     setTicketObject() {
-      console.log("asd", this.currentContact.email)
       this.email = this.currentContact.email || '';
     },
     getTicketObject() {
