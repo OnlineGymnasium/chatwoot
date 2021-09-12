@@ -31,7 +31,7 @@
                 class="input mb-4"
                 v-bind:class="{ danger: $v.message.$error }"
                 type="text"
-                placeholder="Сообщение"
+                placeholder="Сообщение (минимум 30 символов)"
                 rows="4"
               >
             </textarea>
@@ -48,7 +48,7 @@
               class="input mb-4"
               v-bind:class="{ danger: $v.dialog_category.$error }"
               type="text"
-              placeholder="Категория диалога"
+              placeholder="Категория диалога (минимум 10 символов)"
             >
             <span v-if="$v.dialog_category.$error" class="message mb-6">
               Категория должна быть не короче 10 символов
@@ -135,7 +135,6 @@ export default {
     },
     message: {
       required,
-      // here you can change the minLength, also change in validation message above
       minLength: minLength(30)
     },
     dialog_category: {
@@ -152,7 +151,6 @@ export default {
       this.setDefaultProject();
     },
     currentChat(){
-//      console.log("Currentchat watcher")
       this.setTicketObject();
     },
   },
@@ -179,10 +177,9 @@ export default {
     inbox() {
       return this.$store.getters['inboxes/getInbox'](this.activeInbox);
     },
-    currentContact(){
+    currentContact() {
         return this.$store.getters['contacts/getContact'](
-        this.currentChat.meta.sender.id
-      );
+        this.currentChat.meta.sender.id);
       },
   },
   methods: {
