@@ -10,17 +10,13 @@
           <div class="column">
             <label for="email">Email</label>
               <input
-                  v-model="email"
-                  @blur="$v.email.$touch"
-                  id="email"
-                  class="input mb-4"
-                  v-bind:class="{ danger: $v.email.$error }"
-                  type="email"
-                  placeholder="Email"
-                >
-                <span v-if="$v.email.$error" class="message mb-6">
-                  {{ $t('EMAIL_TRANSCRIPT.FORM.EMAIL.ERROR') }}
-                </span>
+                v-model="email"
+                @blur="$v.email.$touch"
+                id="email"
+                class="input mb-4"
+                type="email"
+                placeholder="Email"
+              >
           </div>
           <div>
             <label for="message">Сообщение</label>
@@ -31,12 +27,12 @@
                 class="input mb-4"
                 v-bind:class="{ danger: $v.message.$error }"
                 type="text"
-                placeholder="Сообщение (минимум 30 символов)"
+                placeholder="Опишите проблему и что было сделано (минимум 100 символов)"
                 rows="4"
               >
             </textarea>
             <span v-if="$v.message.$error" class="message mb-6">
-              Сообщение должно быть не короче 30 символов
+              Сообщение должно быть не короче 100 символов
             </span>
           </div>
           <div>
@@ -53,9 +49,9 @@
           <div>
             <label for="agent">Проекты</label>
             <select v-model="selectedKey" required="true">
-              <option 
-                v-for="(proj, index) in projects" 
-                v-bind:value="proj.key" 
+              <option
+                v-for="(proj, index) in projects"
+                v-bind:value="proj.key"
                 v-bind:key=index
               >
                 {{ proj.name }}
@@ -125,13 +121,10 @@ export default {
     };
   },
   validations: {
-    email: {
-      required,
-      email
-    },
+    email: {},
     message: {
       required,
-      minLength: minLength(30)
+      minLength: minLength(100)
     },
     dialog_category: {},
   },
