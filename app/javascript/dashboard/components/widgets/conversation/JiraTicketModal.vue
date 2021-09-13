@@ -7,22 +7,53 @@
       />
       <form @submit.prevent="onSubmit">
         <div class="medium-12 columns">
-          <div>
+          <div class="column">
             <label for="email">Email</label>
-            <input v-model="email" @input="$v.email.$touch" id="email" class="input" type="email" placeholder="Email">
+              <input
+                v-model="email"
+                @blur="$v.email.$touch"
+                id="email"
+                class="input mb-4"
+                type="email"
+                placeholder="Email"
+              >
           </div>
           <div>
             <label for="message">Сообщение</label>
-            <textarea v-model="message" @input="$v.message.$touch" id="message" class="input" type="text" placeholder="Сообщение" rows="4"></textarea>
+            <textarea
+                v-model="message"
+                @blur="$v.message.$touch"
+                id="message"
+                class="input mb-4"
+                v-bind:class="{ danger: $v.message.$error }"
+                type="text"
+                placeholder="Опишите проблему и что было сделано (минимум 100 символов)"
+                rows="4"
+              >
+            </textarea>
+            <span v-if="$v.message.$error" class="message mb-6">
+              Сообщение должно быть не короче 100 символов
+            </span>
           </div>
           <div>
             <label for="dialog_category">Категория диалога</label>
-            <input v-model="dialog_category" @input="$v.dialog_category.$touch" id="dialog_category" class="input" type="text" placeholder="Категория диалога">
+            <input
+              v-model="dialog_category"
+              @blur="$v.dialog_category.$touch"
+              id="dialog_category"
+              class="input mb-4"
+              type="text"
+              placeholder="Категория диалога"
+            >
           </div>
           <div>
             <label for="agent">Проекты</label>
-            <select v-model="selectedKey">
-              <option v-for="proj in projects" :value="proj.key">
+            <select v-model="selectedKey" required="true">
+              <option
+                v-for="(proj, index) in projects"
+                v-bind:value="proj.key"
+                v-bind:key=index
+              >
                 {{ proj.name }}
               </option>
             </select>
@@ -32,7 +63,6 @@
           <div class="medium-12 row">
             <woot-submit-button
               :button-text="$t('EMAIL_TRANSCRIPT.SUBMIT')"
-              
             />
             <button class="button clear" @click.prevent="onCancel">
               {{ $t('EMAIL_TRANSCRIPT.CANCEL') }}
@@ -44,12 +74,26 @@
   </woot-modal>
 </template>
 
+<style scoped>
+  .mb-4 {
+    margin-bottom: 1rem !important;
+  }
+  .mb-6 {
+    margin-bottom: 1.5rem !important;
+  }
+  .danger {
+    border-color: red;
+  }
+</style>
+
 <script>
 import { mapGetters } from 'vuex';
+import { validationMixin } from 'vuelidate'
 import { required, minLength, email } from 'vuelidate/lib/validators';
 import alertMixin from 'shared/mixins/alertMixin';
+
 export default {
-  mixins: [alertMixin],
+  mixins: [alertMixin, validationMixin],
   props: {
     contact: {
       type: Object,
@@ -59,7 +103,7 @@ export default {
       type: Boolean,
       default: false,
     },
-    
+
   },
   data() {
     return {
@@ -78,18 +122,26 @@ export default {
   },
   validations: {
     email: {},
-    message: {},
+    message: {
+      required,
+      minLength: minLength(100)
+    },
     dialog_category: {},
   },
-  
+
   watch: {
     contact() {
       this.setTicketObject();
     },
+    projects() {
+      this.setDefaultProject();
+    },
+    currentChat(){
+      this.setTicketObject();
+    },
   },
-  mounted() {    
+  mounted() {
     this.isLoading = true;
-    
     try {
       this.$store.dispatch('getProjects');
       this.setTicketObject();
@@ -106,7 +158,15 @@ export default {
       currentUser: 'getCurrentUser',
       currentChat: 'getSelectedChat',
       allConversations: 'getAllConversations',
+      activeInbox: 'getSelectedInbox',
     }),
+    inbox() {
+      return this.$store.getters['inboxes/getInbox'](this.currentChat.inbox_id);
+    },
+    currentContact() {
+      return this.$store.getters['contacts/getContact'](
+      this.currentChat.meta.sender.id);
+    },
   },
   methods: {
     onCancel() {
@@ -119,11 +179,11 @@ export default {
       const [chat] = this.allConversations.filter(
         c => c.id === this.currentChat.id
       );
-      
+
       return chat;
     },
     setTicketObject() {
-      this.email = this.currentChat.meta.sender.email || '';
+      this.email = this.currentContact.email || '';
     },
     getTicketObject() {
       return {
@@ -138,6 +198,13 @@ export default {
         projectKey: this.selectedKey,
         messages: this.getMessages(),
       };
+    },
+    setDefaultProject() {
+      this.projects.forEach(({key, name}) => {
+        if (this.inbox?.name?.trim().toLowerCase() == name.trim().toLowerCase()) {
+          this.selectedKey = key
+        }
+      })
     },
     async onSubmit() {
       this.$v.$touch();

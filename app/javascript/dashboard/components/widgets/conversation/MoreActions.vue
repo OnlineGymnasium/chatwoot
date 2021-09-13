@@ -1,5 +1,12 @@
 <template>
   <div class="flex-container actions--container">
+    <div class="send-button--container">
+      <woot-button
+        color-scheme="secondary"
+        @click="sendTicketToJira"
+        >Отправить тикет в Jira
+      </woot-button>
+    </div>
     <resolve-action
       :conversation-id="currentChat.id"
       :status="currentChat.status"
@@ -19,11 +26,6 @@
       :class="{ 'dropdown-pane--open': showConversationActions }"
     >
       <woot-dropdown-menu>
-        <woot-dropdown-item>
-          <button class="button clear alert " @click="sendTicketToJira">
-            <span>Отправить тикет в Jira</span>
-          </button>
-        </woot-dropdown-item>
         <woot-dropdown-item v-if="!currentChat.muted">
           <button class="button clear alert " @click="mute">
             <span>{{ $t('CONTACT_PANEL.MUTE_CONTACT') }}</span>
@@ -135,5 +137,13 @@ export default {
 .icon {
   margin-right: var(--space-smaller);
   min-width: var(--space-normal);
+}
+
+.send-button--container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin: 0 0.75rem;
 }
 </style>
