@@ -46,13 +46,9 @@
               @blur="$v.dialog_category.$touch"
               id="dialog_category"
               class="input mb-4"
-              v-bind:class="{ danger: $v.dialog_category.$error }"
               type="text"
-              placeholder="Категория диалога (минимум 10 символов)"
+              placeholder="Категория диалога"
             >
-            <span v-if="$v.dialog_category.$error" class="message mb-6">
-              Категория должна быть не короче 10 символов
-            </span>
           </div>
           <div>
             <label for="agent">Проекты</label>
@@ -137,10 +133,7 @@ export default {
       required,
       minLength: minLength(30)
     },
-    dialog_category: {
-      required,
-      minLength: minLength(10)
-    },
+    dialog_category: {},
   },
 
   watch: {
