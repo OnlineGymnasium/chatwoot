@@ -4,6 +4,7 @@ require 'base64'
 
 class Api::V1::Widget::JiraController < ApplicationController
   protect_from_forgery with: :null_session
+  skip_before_action :verify_authenticity_token
 
   def get_project
     host_url = ENV.fetch('JIRA_ORGANIZATION_URL', '')
@@ -16,7 +17,7 @@ class Api::V1::Widget::JiraController < ApplicationController
     }
 
     data = {
-      
+
     }
 
     response = HTTParty.get(host_url + '/rest/api/2/project', :query => data, :headers => headers)
@@ -36,23 +37,18 @@ class Api::V1::Widget::JiraController < ApplicationController
     }
 
     sender_email = params[:ticket][:email].to_s
-    
+
     if sender_email.empty?
       sender_email = params[:ticket][:username].to_s
     end
 
-    # getting a dialog history
-    dialog = ""
-    
-    params[:ticket][:messages]["messages"].each do |msg|
-      dialog += Time.at(msg["created_at"]).to_datetime.strftime("%b %d %r") + "\n" + msg["content"] + "\n"
-    end
+    link_to_dialog = params[:ticket][:link_to_dialog]
 
     description = "Chatwoot ID - " + params[:ticket][:username].to_s + ";\n Email - " + sender_email + ";\n Browser - " + \
     + params[:ticket][:browser].to_s + ";\n Message - " + params[:ticket][:message].to_s + ";\n Initiated at - " + \
     + params[:ticket][:first_appeal].to_s + ";\n Dialog category - " + params[:ticket][:dialog_category].to_s + \
-    + ";\n Initiated from - " + params[:ticket][:begin_link].to_s + ";\n Dialog:\n " + dialog
-    
+    + ";\n Initiated from - " + params[:ticket][:begin_link].to_s + ";\n Link to dialog:\n " + link_to_dialog
+
     data = {
       :fields => {
         :project => {
@@ -79,16 +75,16 @@ class Api::V1::Widget::JiraController < ApplicationController
     }
 
     response = HTTParty.post(host_url + '/rest/api/2/issue/', :body => data.to_json, :headers => headers)
-    
+
     @res = response.body
-    
+
     if response.code == 201
       render json: @res
     else
       render :json => {}, :status => :bad_request
     end
   end
-  
+
   private
     def ticket_params
       params.require(:ticket).permit(
