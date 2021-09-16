@@ -30,7 +30,7 @@ class Api::V1::Widget::JiraController < ApplicationController
   def send_ticket
     host_url = ENV['JIRA_ORGANIZATION_URL']
     email = ENV['JIRA_USERNAME']
-    token = ENV['JIRA_API_TOKEN']
+    token = ENV['JIRA_API_TOKEN'] 
     headers = {
       "Authorization" => 'Basic ' + Base64.strict_encode64(email + ':' + token),
       "Content-Type" => 'application/json',
@@ -43,11 +43,12 @@ class Api::V1::Widget::JiraController < ApplicationController
     end
 
     link_to_dialog = params[:ticket][:link_to_dialog]
+    specialist = params[:ticket][:specialist]
 
     description = "Chatwoot ID - " + params[:ticket][:username].to_s + ";\n Email - " + sender_email + ";\n Browser - " + \
     + params[:ticket][:browser].to_s + ";\n Message - " + params[:ticket][:message].to_s + ";\n Initiated at - " + \
     + params[:ticket][:first_appeal].to_s + ";\n Dialog category - " + params[:ticket][:dialog_category].to_s + \
-    + ";\n Initiated from - " + params[:ticket][:begin_link].to_s + ";\n Link to dialog:\n " + link_to_dialog
+    + ";\n Initiated from - " + params[:ticket][:begin_link].to_s + ";\n Link to dialog - " + link_to_dialog + "\n Specialist - " + specialist
 
     data = {
       :fields => {
