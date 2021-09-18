@@ -14,7 +14,6 @@ class ApiClient {
   }
 
   get mainUrl() {
-    debugger
     return window.location.host;
   }
 
