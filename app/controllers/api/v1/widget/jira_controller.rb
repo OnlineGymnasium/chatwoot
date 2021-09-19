@@ -21,6 +21,14 @@ class Api::V1::Widget::JiraController < ApplicationController
   #       userLink: user.userLink
   #     });
   #   };
+  #  
+  # let userHistory = localStorage.getItem('userHistory');
+
+  # if (userHistory != undefined && userHistory != null && userHistory != '') {
+  #   window.$chatwoot.setCustomAttributes({
+  #     userHistory: userHistory
+  #   });
+  # }
   # });
 
   def get_project
@@ -46,7 +54,6 @@ class Api::V1::Widget::JiraController < ApplicationController
     host_url = ENV['JIRA_ORGANIZATION_URL']
     email = ENV['JIRA_USERNAME']
     token = ENV['JIRA_API_TOKEN']
-
     headers = {
       "Authorization" => 'Basic ' + Base64.strict_encode64(email + ':' + token),
       "Content-Type" => 'application/json',
