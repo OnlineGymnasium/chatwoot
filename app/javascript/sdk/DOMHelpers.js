@@ -86,6 +86,18 @@ export const onLocationChangeListener = () => {
     referrerHost,
   });
 
+  // Need to record user's history of browsing
+  let userHistory = localStorage.getItem('userHistory');
+  if (userHistory == undefined || userHistory == null || userHistory == '') {
+    localStorage.setItem('userHistory', oldHref + ', ')
+  } else {
+    if (userHistory.length > 255 && userHistory.split(', ').length > 1) {
+      // Need to cut such long userHistory
+      localStorage.userHistory = userHistory.split(', ').slice(1).join(', ');
+    }
+    localStorage.userHistory += oldHref + ', '
+  }
+
   const bodyList = document.querySelector('body');
   const observer = new MutationObserver(mutations => {
     mutations.forEach(() => {

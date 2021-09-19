@@ -197,7 +197,7 @@ export default {
         begin_link: this.currentChat.additional_attributes.referer,
         projectKey: this.selectedKey,
         link_to_dialog: location.toString(),
-        specialist: `${this.currentUser.name} ${this.currentUser.email} `
+        specialist: `${this.currentUser.name} ${this.currentUser.email}`
       };
     },
     setDefaultProject() {

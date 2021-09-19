@@ -219,18 +219,7 @@ export default {
         } else if (message.event === 'change-url') {
           const { referrerURL, referrerHost } = message;
 
-          // Need to record user's history of browsing
-          let userHistory = localStorage.getItem('userHistory');
-          if (userHistory == undefined || userHistory == null || userHistory == '') {
-            localStorage.setItem('userHistory', referrerURL + ', ')
-          } else {
-            if (userHistory.length > 255 && userHistory.split(', ').length > 1) {
-              // Need to cut such long userHistory
-              localStorage.userHistory = userHistory.split(', ').slice(1).join(', ');
-            }
-            localStorage.userHistory += referrerURL + ', '
-          }
-
+         
           this.initCampaigns({ currentURL: referrerURL, websiteToken });
           window.referrerURL = referrerURL;
           bus.$emit(BUS_EVENTS.SET_REFERRER_HOST, referrerHost);
