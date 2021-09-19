@@ -25,7 +25,7 @@
             {{ $t('CONVERSATION.CONTEXT_MENU.COPY') }}
           </woot-button>
         </woot-dropdown-item>
-        <woot-dropdown-item>
+        <!-- <woot-dropdown-item>
           <woot-button
             variant="clear"
             color-scheme="alert"
@@ -35,7 +35,7 @@
           >
             {{ $t('CONVERSATION.CONTEXT_MENU.DELETE') }}
           </woot-button>
-        </woot-dropdown-item>
+        </woot-dropdown-item> -->
       </woot-dropdown-menu>
     </div>
   </div>
