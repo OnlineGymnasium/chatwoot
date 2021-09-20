@@ -76,11 +76,11 @@ ENV RAILS_ENV ${RAILS_ENV}
 ENV BUNDLE_PATH="/gems"
 
 RUN apk add --update --no-cache \
-  openssl \
-  tzdata \
-  postgresql-client \
-  imagemagick \
-  git \
+    openssl \
+    tzdata \
+    postgresql-client \
+    imagemagick \
+    git \
   && gem install bundler
 
 RUN if [ "$RAILS_ENV" != "production" ]; then \
