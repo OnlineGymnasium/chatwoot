@@ -6,31 +6,6 @@ class Api::V1::Widget::JiraController < ApplicationController
   protect_from_forgery with: :null_session
   skip_before_action :verify_authenticity_token
 
-  # window.addEventListener('chatwoot:ready', function () {
-  #   user = {
-  #     email: 'test2@mail.com',
-  #     name: 'testuser2',
-  #     userLink: "http://link_to.com"
-  #   }
-
-  #   window.$chatwoot.setUser('',
-  #   { email: user.email,  name: user.name });
-
-  #   if (user.userLink && user.userLink.length !== 0) {
-  #     window.$chatwoot.setCustomAttributes({
-  #       userLink: user.userLink
-  #     });
-  #   };
-  #  
-  # let userHistory = localStorage.getItem('userHistory');
-
-  # if (userHistory != undefined && userHistory != null && userHistory != '') {
-  #   window.$chatwoot.setCustomAttributes({
-  #     userHistory: userHistory
-  #   });
-  # }
-  # });
-
   def get_project
     host_url = ENV.fetch('JIRA_ORGANIZATION_URL', '')
     email = ENV.fetch('JIRA_USERNAME', '')
