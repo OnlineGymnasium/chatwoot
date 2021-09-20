@@ -219,6 +219,8 @@ export default {
           this.scrollConversationToBottom();
         } else if (message.event === 'change-url') {
           const { referrerURL, referrerHost } = message;
+
+         
           this.initCampaigns({ currentURL: referrerURL, websiteToken });
           window.referrerURL = referrerURL;
           bus.$emit(BUS_EVENTS.SET_REFERRER_HOST, referrerHost);

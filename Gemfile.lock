@@ -366,11 +366,11 @@ GEM
     nio4r (2.5.8)
     nokogiri (1.11.7-arm64-darwin)
       racc (~> 1.4)
+    nokogiri (1.11.7-x64-mingw32)
+      racc (~> 1.4)
     nokogiri (1.11.7-x86_64-darwin)
       racc (~> 1.4)
     nokogiri (1.11.7-x86_64-linux)
-      racc (~> 1.4)
-    nokogiri (1.11.7-x64-mingw32)
       racc (~> 1.4)
     oauth (0.5.6)
     orm_adapter (0.5.0)
@@ -631,9 +631,9 @@ GEM
     zeitwerk (2.4.2)
 
 PLATFORMS
+  arm64-darwin-20
   ruby
   x64-mingw32
-  arm64-darwin-20
   x86_64-darwin-18
   x86_64-darwin-20
   x86_64-darwin-21
@@ -677,11 +677,11 @@ DEPENDENCIES
   haikunator
   hairtrigger
   hashie
-  image_processing
   httparty
+  image_processing
   jbuilder
   jira-ruby
-  json_refs!
+  json_refs
   json_schemer
   jwt
   kaminari
@@ -741,4 +741,4 @@ RUBY VERSION
    ruby 3.0.2p107
 
 BUNDLED WITH
-   2.2.25
+   2.2.27

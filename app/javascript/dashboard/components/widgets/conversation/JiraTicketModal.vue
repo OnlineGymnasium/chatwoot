@@ -196,7 +196,8 @@ export default {
         dialog_category: this.dialog_category,
         begin_link: this.currentChat.additional_attributes.referer,
         projectKey: this.selectedKey,
-        messages: this.getMessages(),
+        link_to_dialog: location.toString(),
+        specialist: `${this.currentUser.name} ${this.currentUser.email}`
       };
     },
     setDefaultProject() {
@@ -208,7 +209,7 @@ export default {
     },
     async onSubmit() {
       this.$v.$touch();
-
+      
       if (this.$v.$invalid) {
         return;
       }
