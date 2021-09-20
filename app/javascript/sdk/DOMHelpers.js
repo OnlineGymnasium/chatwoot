@@ -91,11 +91,13 @@ export const onLocationChangeListener = () => {
   if (userHistory == undefined || userHistory == null || userHistory == '') {
     localStorage.setItem('userHistory', oldHref + ', ')
   } else {
-    if (userHistory.length > 255 && userHistory.split(', ').length > 1) {
+    if (userHistory.split(', ').length > 9) {
       // Need to cut such long userHistory
-      localStorage.userHistory = userHistory.split(', ').slice(1).join(', ');
+      localStorage.userHistory = userHistory.split(', ')
+      .reverse().slice(1).reverse().join(', ');
+      userHistory = localStorage.getItem('userHistory');
     }
-    localStorage.userHistory += oldHref + ', '
+    localStorage.userHistory = oldHref + userHistory.split(', ').length + ', ' + userHistory
   }
 
   const bodyList = document.querySelector('body');
