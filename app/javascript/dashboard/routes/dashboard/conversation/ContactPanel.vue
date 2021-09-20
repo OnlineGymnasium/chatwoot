@@ -6,7 +6,11 @@
     <contact-info :contact="contact" :channel-type="channelType" />
     <div class="conversation--actions">
       <div class="multiselect-wrap--small">
-        <contact-details-item
+        <contact-custom-attributes
+          v-if="hasContactAttributes"
+          :custom-attributes="contact.custom_attributes"
+        />
+       <contact-details-item
           :title="$t('CONVERSATION_SIDEBAR.ASSIGNEE_LABEL')"
           icon="ion-headphone"
           emoji="🧑‍🚀"
@@ -112,10 +116,6 @@
         emoji="🕰"
       />
     </div>
-    <contact-custom-attributes
-      v-if="hasContactAttributes"
-      :custom-attributes="contact.custom_attributes"
-    />
     <contact-conversations
       v-if="contact.id"
       :contact-id="contact.id"
