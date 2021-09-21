@@ -6,6 +6,8 @@ services:
       context: .
       dockerfile: ./docker/Dockerfile
     env_file: .env ## Change this file for customized env variables
+    volumes:
+      - /data/storage:/app/storage
 
   rails:
     <<: *base
