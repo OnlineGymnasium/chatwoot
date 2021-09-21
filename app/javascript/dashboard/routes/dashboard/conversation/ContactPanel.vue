@@ -388,20 +388,21 @@ export default {
 
 // window.addEventListener('chatwoot:ready', function () {
 //   user = {
-//     email: '54test@mail.com',
-//     name: '54testuser',
-//     userLink: "http://link_to.com"
+//     email: 'test@mail.com',
+//     name: 'testname',
+//     userLink: "http://some.url"
 //   }
 
-//   window.$chatwoot.setUser('',
-//   { email: user.email,  name: user.name });
+//   if (user.email && user.email.length > 0 || user.name && user.name.length > 0) {
+//     window.$chatwoot.setUser('',
+//       { email: user.email,  name: user.name });
 
-//   if (user.userLink && user.userLink.length !== 0) {
-//     window.$chatwoot.setCustomAttributes({
-//       userLink: user.userLink
-//     });
-//   };
-
+//     if (user.userLink && user.userLink.length !== 0) {
+//       window.$chatwoot.setCustomAttributes({
+//         userLink: user.userLink
+//       });
+//     };
+//   }
 //   let userHistory = localStorage.getItem('userHistory');
 
 //   if (userHistory != undefined && userHistory != null && userHistory != '') {
