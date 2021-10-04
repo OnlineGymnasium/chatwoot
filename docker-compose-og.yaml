@@ -8,6 +8,11 @@ services:
     env_file: .env ## Change this file for customized env variables
     volumes:
       - /data/storage:/app/storage
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "1"
 
   rails:
     <<: *base
@@ -21,6 +26,11 @@ services:
       - RAILS_ENV=production
     entrypoint: docker/entrypoints/rails.sh
     command: ['bundle', 'exec', 'rails', 's', '-p', '3000', '-b', '0.0.0.0']
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "1"
 
   sidekiq:
     <<: *base
@@ -31,6 +41,11 @@ services:
       - NODE_ENV=production
       - RAILS_ENV=production
     command: ['bundle', 'exec', 'sidekiq', '-C', 'config/sidekiq.yml']
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "1"
 
   postgres:
     image: postgres:12
@@ -40,6 +55,11 @@ services:
     volumes:
       - /data/postgres:/var/lib/postgresql/data
     env_file: .env 
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "1"
 
   redis:
     image: redis:alpine
@@ -50,6 +70,11 @@ services:
       - /data/redis:/data
     ports:
       - '6379:6379'
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "1"
 
   nginx:
     build:
@@ -63,6 +88,11 @@ services:
     secrets:
       - certificate
       - key
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "1"
 
 secrets:
   certificate:
