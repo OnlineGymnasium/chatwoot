@@ -71,9 +71,13 @@ export const mutations = {
     Vue.set(chat.meta, 'team', team);
   },
 
-  [types.default.RESOLVE_CONVERSATION](_state, { conversationId, status }) {
+  [types.default.CHANGE_CONVERSATION_STATUS](
+    _state,
+    { conversationId, status, snoozedUntil }
+  ) {
     const conversation =
       getters.getConversationById(_state)(conversationId) || {};
+    Vue.set(conversation, 'snoozed_until', snoozedUntil);
     Vue.set(conversation, 'status', status);
   },
 
@@ -182,17 +186,24 @@ export const mutations = {
 
   // JIRA
   [types.default.GET_PROJECTS](
-    _state, 
+    _state,
     data
   ) {
     Vue.set(_state.jiraProjects, 'projectsArray', data);
   },
 
   [types.default.SEND_JIRA_TICKET](
-    _state, 
+    _state,
     data
   ) {
     Vue.set(_state.jiraResponse, 'jiraTicketResponse', data);
+  },
+
+  [types.default.CLEAR_CONTACT_CONVERSATIONS](_state, contactId) {
+    const chats = _state.allConversations.filter(
+      c => c.meta.sender.id !== contactId
+    );
+    Vue.set(_state, 'allConversations', chats);
   },
 };
 
