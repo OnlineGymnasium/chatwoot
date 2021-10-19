@@ -24,13 +24,8 @@ services:
       - RAILS_ENV=production
     entrypoint: docker/entrypoints/rails.sh
     command: ['bundle', 'exec', 'rails', 's', '-p', '3000', '-b', '0.0.0.0']
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "1"
 
-    rails2:
+  rails2:
     <<: *base
     depends_on:
       - postgres
@@ -40,11 +35,6 @@ services:
       - RAILS_ENV=production
     entrypoint: docker/entrypoints/rails.sh
     command: ['bundle', 'exec', 'rails', 's', '-p', '3002', '-b', '0.0.0.0']
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "1"
 
   sidekiq:
     <<: *base
