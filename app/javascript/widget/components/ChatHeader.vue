@@ -62,7 +62,7 @@ export default {
     }),
     isOnline() {
       const { workingHoursEnabled } = this.channelConfig;
-      const anyAgentOnline = this.availableAgents.length > 0;
+      const anyAgentOnline = 1;
 
       if (workingHoursEnabled) {
         return this.isInBetweenTheWorkingHours;
