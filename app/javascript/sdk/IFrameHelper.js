@@ -109,7 +109,7 @@ export const IFrameHelper = {
   events: {
     loaded: message => {
       Cookies.set('cw_conversation', message.config.authToken, {
-        expires: 365,
+        expires: 3,
         sameSite: 'Lax',
       });
       window.$chatwoot.hasLoaded = true;
