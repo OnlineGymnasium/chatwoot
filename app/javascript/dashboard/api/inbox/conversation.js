@@ -51,9 +51,10 @@ class ConversationApi extends ApiClient {
     return axios.post(`${this.url}/${id}/update_last_seen`);
   }
 
-  toggleTyping({ conversationId, status }) {
+  toggleTyping({ conversationId, status, isPrivate }) {
     return axios.post(`${this.url}/${conversationId}/toggle_typing_status`, {
       typing_status: status,
+      is_private: isPrivate
     });
   }
 
@@ -86,8 +87,14 @@ class ConversationApi extends ApiClient {
   }
 
   sendJiraTicket(ticket) {
-    
-    return axios.post(`/api/v1/widget/jira/send_ticket`, {ticket});
+
+    return axios.post(`/api/v1/widget/jira/send_ticket`, { ticket });
+  }
+
+  updateCustomAttributes({ conversationId, customAttributes }) {
+    return axios.post(`${this.url}/${conversationId}/custom_attributes`, {
+      custom_attributes: customAttributes,
+    });
   }
 }
 
