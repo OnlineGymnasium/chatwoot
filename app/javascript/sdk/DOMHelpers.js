@@ -15,7 +15,7 @@ export const wootOn = (elm, event, fn) => {
     // <= IE 8 loses scope so need to apply, we add this to object so we
     // can detach later (can't detach anonymous functions)
     // eslint-disable-next-line
-    elm[event + fn] = function() {
+    elm[event + fn] = function () {
       // eslint-disable-next-line
       return fn.apply(elm, arguments);
     };
@@ -91,10 +91,10 @@ export const onLocationChangeListener = () => {
   if (userHistory == undefined || userHistory == null || userHistory == '') {
     localStorage.setItem('userHistory', oldHref + ' ')
   } else {
-    if (userHistory.split(', ').length > 9) {
+    if (userHistory.split(', ').length > 1) {
       // Need to cut such long userHistory
       localStorage.userHistory = userHistory.split(' ')
-      .reverse().slice(1).reverse().join(' ');
+        .reverse().slice(1).reverse().join('');
       userHistory = localStorage.getItem('userHistory');
     }
     localStorage.userHistory = oldHref + ' ' + userHistory
