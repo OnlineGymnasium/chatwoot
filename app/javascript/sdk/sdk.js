@@ -20,6 +20,8 @@ export const SDK_CSS = `.woot-widget-holder {
   border-radius: 0 !important;
   bottom: 94px;
   box-shadow: none !important;
+  height: 40px;
+  width: 252 px;
 }
 
 .woot-widget-bubble {
@@ -173,7 +175,7 @@ export const SDK_CSS = `.woot-widget-holder {
     bottom: 104px;
     height: calc(85% - 64px - 20px);
     max-height: 590px !important;
-    min-height: 250px !important;
+    min-height: 40px !important;
     width: 400px !important;
  }
 }

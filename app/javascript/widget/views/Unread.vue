@@ -1,4 +1,5 @@
 <template>
+<!-- 
   <div class="unread-wrap">
     <div class="close-unread-wrap">
       <button
@@ -22,6 +23,7 @@
         :campaign-id="message.campaignId"
       />
     </div>
+    -->
 
     <div class="open-read-view-wrap">
       <button
