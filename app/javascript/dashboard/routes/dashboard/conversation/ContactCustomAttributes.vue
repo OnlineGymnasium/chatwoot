@@ -9,7 +9,10 @@
         {{ attribute }}
       </div>
       <div>
-        <span v-html="valueWithLink(customAttributes[attribute])" class="column-scoped"></span>
+        <span
+          class="column-scoped"
+          v-html="valueWithLink(customAttributes[attribute])"
+        ></span>
       </div>
     </div>
     <p v-if="!listOfAttributes.length">

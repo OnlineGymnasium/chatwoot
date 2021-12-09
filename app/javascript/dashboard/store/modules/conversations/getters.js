@@ -31,6 +31,9 @@ const getters = {
       return isChatMine;
     });
   },
+  getAppliedConversationFilters: _state => {
+    return _state.appliedFilters;
+  },
   getUnAssignedChats: _state => activeFilters => {
     return _state.allConversations.filter(conversation => {
       const isUnAssigned = !conversation.meta.assignee;
@@ -76,13 +79,13 @@ const getters = {
     );
   },
 
-  getProjects: (state) => {
+  getProjects: state => {
     return state.jiraProjects.projectsArray;
   },
 
-  getJiraTicketResponse: (state) => {
+  getJiraTicketResponse: state => {
     return state.jiraResponse.jiraTicketResponse;
-  }
+  },
 };
 
 export default getters;

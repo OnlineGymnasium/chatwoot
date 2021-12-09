@@ -89,15 +89,19 @@ export const onLocationChangeListener = () => {
   // Need to record user's history of browsing
   let userHistory = localStorage.getItem('userHistory');
   if (userHistory == undefined || userHistory == null || userHistory == '') {
-    localStorage.setItem('userHistory', oldHref + ' ')
+    localStorage.setItem('userHistory', oldHref + ' ');
   } else {
     if (userHistory.split(', ').length > 1) {
       // Need to cut such long userHistory
-      localStorage.userHistory = userHistory.split(' ')
-        .reverse().slice(1).reverse().join('');
+      localStorage.userHistory = userHistory
+        .split(' ')
+        .reverse()
+        .slice(1)
+        .reverse()
+        .join('');
       userHistory = localStorage.getItem('userHistory');
     }
-    localStorage.userHistory = oldHref + ' ' + userHistory
+    localStorage.userHistory = oldHref + ' ' + userHistory;
   }
 
   const bodyList = document.querySelector('body');
