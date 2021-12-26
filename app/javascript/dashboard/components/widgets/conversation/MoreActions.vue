@@ -10,8 +10,7 @@ color-scheme="secondary"
     <woot-button
       v-if="!currentChat.muted"
       v-tooltip="$t('CONTACT_PANEL.MUTE_CONTACT')"
-      variant="smooth"
-      size="small"
+      variant="clear"
       color-scheme="secondary"
       icon="speaker-mute"
       @click="mute"
@@ -19,16 +18,14 @@ color-scheme="secondary"
     <woot-button
       v-else
       v-tooltip.left="$t('CONTACT_PANEL.UNMUTE_CONTACT')"
-      variant="smooth"
-      size="small"
+      variant="clear"
       color-scheme="secondary"
       icon="speaker-1"
       @click="unmute"
     />
     <woot-button
       v-tooltip="$t('CONTACT_PANEL.SEND_TRANSCRIPT')"
-      variant="smooth"
-      size="small"
+      variant="clear"
       color-scheme="secondary"
       icon="share"
       @click="toggleEmailActionsModal"
@@ -113,8 +110,8 @@ export default {
 .actions--container {
   align-items: center;
 
-  .button {
-    margin-right: var(--space-small);
+  .resolve-actions {
+    margin-left: var(--space-small);
   }
 }
 
