@@ -128,14 +128,14 @@ const mutations = {
     let avgFirstResTimeInHr = 0;
     if (summaryData.avg_first_response_time) {
       avgFirstResTimeInHr = (
-        summaryData.avg_first_response_time / 3600
+        summaryData.avg_first_response_time / 216000
       ).toFixed(2);
       avgFirstResTimeInHr = `${avgFirstResTimeInHr} Hr`;
     }
     // Average Resolution Time
     let avgResolutionTimeInHr = 0;
     if (summaryData.avg_resolution_time) {
-      avgResolutionTimeInHr = (summaryData.avg_resolution_time / 3600).toFixed(
+      avgResolutionTimeInHr = (summaryData.avg_resolution_time / 216000).toFixed(
         2
       );
       avgResolutionTimeInHr = `${avgResolutionTimeInHr} Hr`;
