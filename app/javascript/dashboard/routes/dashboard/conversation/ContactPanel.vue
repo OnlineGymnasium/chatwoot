@@ -264,6 +264,12 @@ export default {
   }
 }
 
+.list-group {
+  .list-group-item {
+    background-color: var(--white);
+  }
+}
+
 ::v-deep {
   .contact--profile {
     padding-bottom: var(--space-slab);

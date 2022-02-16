@@ -2,20 +2,16 @@
   <!-- 
   <div class="unread-wrap">
     <div class="close-unread-wrap">
-      <button
-        v-if="showCloseButton"
-        class="button small close-unread-button"
-        @click="closeFullView"
-      >
-        <div class="flex items-center">
+      <button class="button small close-unread-button" @click="closeFullView">
+        <span class="flex items-center">
           <fluent-icon class="mr-1" icon="dismiss" size="12" />
           {{ $t('UNREAD_VIEW.CLOSE_MESSAGES_BUTTON') }}
-        </div>
+        </span>
       </button>
     </div>
     <div class="unread-messages">
       <unread-message
-        v-for="(message, index) in allMessages"
+        v-for="(message, index) in messages"
         :key="message.id"
         :message-type="message.messageType"
         :message-id="message.id"
@@ -46,7 +42,7 @@
 import { IFrameHelper } from 'widget/helpers/utils';
 import { mapGetters } from 'vuex';
 import configMixin from '../mixins/configMixin';
-
+import { ON_UNREAD_MESSAGE_CLICK } from '../constants/widgetBusEvents';
 import FluentIcon from 'shared/components/FluentIcon/Index.vue';
 import UnreadMessage from 'widget/components/UnreadMessage.vue';
 
@@ -58,58 +54,25 @@ export default {
   },
   mixins: [configMixin],
   props: {
-    hasFetched: {
-      type: Boolean,
-      default: false,
-    },
-    unreadMessageCount: {
-      type: Number,
-      default: 0,
-    },
-    hideMessageBubble: {
-      type: Boolean,
-      default: false,
-    },
-    showUnreadView: {
-      type: Boolean,
-      default: false,
+    messages: {
+      type: Array,
+      required: true,
     },
   },
   computed: {
-    ...mapGetters({
-      unreadMessages: 'conversation/getUnreadTextMessages',
-      campaign: 'campaign/getActiveCampaign',
-    }),
-    showCloseButton() {
-      return this.unreadMessageCount;
-    },
+    ...mapGetters({ unreadMessageCount: 'conversation/getUnreadMessageCount' }),
     sender() {
-      const [firstMessage] = this.unreadMessages;
+      const [firstMessage] = this.messages;
       return firstMessage.sender || {};
-    },
-    allMessages() {
-      if (this.showUnreadView) {
-        return this.unreadMessages;
-      }
-      const { sender, id: campaignId, message: content } = this.campaign;
-      return [
-        {
-          content,
-          sender,
-          campaignId,
-        },
-      ];
     },
   },
   methods: {
-    openFullView() {
-      bus.$emit('on-unread-view-clicked');
+    openConversationView() {
+      bus.$emit(ON_UNREAD_MESSAGE_CLICK);
     },
     closeFullView() {
       if (IFrameHelper.isIFrame()) {
-        IFrameHelper.sendMessage({
-          event: 'toggleBubble',
-        });
+        IFrameHelper.sendMessage({ event: 'toggleBubble' });
       }
     },
     getMessageContent(message) {
@@ -173,10 +136,6 @@ export default {
     &:hover {
       color: $color-body;
     }
-  }
-
-  .close-unread-wrap {
-    text-align: left;
   }
 }
 </style>
