@@ -1,5 +1,5 @@
 <template>
-  <!-- 
+<!--
   <div class="unread-wrap">
     <div class="close-unread-wrap">
       <button class="button small close-unread-button" @click="closeFullView">
@@ -21,20 +21,20 @@
         :campaign-id="message.campaignId"
       />
     </div>
-    -->
-
-  <div class="open-read-view-wrap">
-    <button
-      v-if="unreadMessageCount"
-      class="button clear-button"
-      @click="openFullView"
-    >
-      <div class="flex items-center">
-        <fluent-icon class="mr-2" size="16" icon="arrow-right" />
-        {{ $t('UNREAD_VIEW.VIEW_MESSAGES_BUTTON') }}
-      </div>
-    </button>
-  </div>
+-->
+  <div class="unread-wrap">
+    <div class="open-read-view-wrap">
+      <button
+        v-if="unreadMessageCount"
+        class="button clear-button"
+        @click="openConversationView"
+      >
+        <span class="flex items-center">
+          <fluent-icon class="mr-2" size="16" icon="arrow-right" />
+          {{ $t('UNREAD_VIEW.VIEW_MESSAGES_BUTTON') }}
+        </span>
+      </button>
+    </div>
   </div>
 </template>
 
@@ -45,7 +45,6 @@ import configMixin from '../mixins/configMixin';
 import { ON_UNREAD_MESSAGE_CLICK } from '../constants/widgetBusEvents';
 import FluentIcon from 'shared/components/FluentIcon/Index.vue';
 import UnreadMessage from 'widget/components/UnreadMessage.vue';
-
 export default {
   name: 'Unread',
   components: {
@@ -78,11 +77,8 @@ export default {
     getMessageContent(message) {
       const { attachments, content } = message;
       const hasAttachments = attachments && attachments.length;
-
       if (content) return content;
-
       if (hasAttachments) return `📑`;
-
       return '';
     },
   },
@@ -90,7 +86,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import '~widget/assets/scss/variables';
-
 .unread-wrap {
   width: 100%;
   height: auto;
@@ -101,11 +96,9 @@ export default {
   flex-wrap: nowrap;
   justify-content: flex-end;
   overflow: hidden;
-
   .unread-messages {
     padding-bottom: $space-small;
   }
-
   .clear-button {
     background: transparent;
     color: $color-woot;
@@ -116,13 +109,11 @@ export default {
     transition: all 0.3s $ease-in-cubic;
     margin-left: $space-smaller;
     padding-right: $space-one;
-
     &:hover {
       transform: translateX($space-smaller);
       color: $color-primary-dark;
     }
   }
-
   .close-unread-button {
     background: $color-background;
     color: $color-light-gray;
@@ -132,7 +123,6 @@ export default {
     transition: all 0.3s $ease-in-cubic;
     margin-bottom: $space-slab;
     border-radius: $space-normal;
-
     &:hover {
       color: $color-body;
     }
