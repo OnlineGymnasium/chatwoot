@@ -102,7 +102,7 @@ export const IFrameHelper = {
 
   setFrameHeightToFitContent: (extraHeight, isFixedHeight) => {
     const iframe = IFrameHelper.getAppFrame();
-    const updatedIframeHeight = isFixedHeight ? `${extraHeight}px` : '100%';
+    const updatedIframeHeight = '100%';
 
     if (iframe)
       iframe.setAttribute('style', `height: ${updatedIframeHeight} !important`);
