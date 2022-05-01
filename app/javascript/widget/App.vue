@@ -12,6 +12,7 @@
       'is-mobile': isMobile,
       'is-widget-right': isRightAligned,
       'is-bubble-hidden': hideMessageBubble,
+      'is-flat-design': isWidgetStyleFlat,
     }"
   >
     <router-view></router-view>
@@ -61,6 +62,7 @@ export default {
       isWidgetOpen: 'appConfig/getIsWidgetOpen',
       messageCount: 'conversation/getMessageCount',
       unreadMessageCount: 'conversation/getUnreadMessageCount',
+      isWidgetStyleFlat: 'appConfig/isWidgetStyleFlat',
     }),
     isIFrame() {
       return IFrameHelper.isIFrame();
@@ -136,7 +138,13 @@ export default {
       }
     },
     registerUnreadEvents() {
-      bus.$on(ON_AGENT_MESSAGE_RECEIVED, this.setUnreadView);
+      bus.$on(ON_AGENT_MESSAGE_RECEIVED, () => {
+        const { name: routeName } = this.$route;
+        if (this.isWidgetOpen && routeName === 'messages') {
+          this.$store.dispatch('conversation/setUserLastSeen');
+        }
+        this.setUnreadView();
+      });
       bus.$on(ON_UNREAD_MESSAGE_CLICK, () => {
         this.replaceRoute('messages').then(() => this.unsetUnreadView());
       });
@@ -173,6 +181,7 @@ export default {
     },
     setUnreadView() {
       const { unreadMessageCount } = this;
+
       if (this.isIFrame && unreadMessageCount > 0 && !this.isWidgetOpen) {
         this.replaceRoute('unread-messages').then(() => {
           this.setIframeHeight(true);

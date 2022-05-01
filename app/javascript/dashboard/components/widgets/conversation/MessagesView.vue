@@ -47,6 +47,7 @@
         class="message--read"
         :data="message"
         :is-a-tweet="isATweet"
+        :has-instagram-story="hasInstagramStory"
       />
       <li v-show="getUnreadCount != 0" class="unread--toast">
         <span class="text-uppercase">
@@ -64,6 +65,7 @@
         class="message--unread"
         :data="message"
         :is-a-tweet="isATweet"
+        :has-instagram-story="hasInstagramStory"
       />
     </ul>
     <div
@@ -81,7 +83,6 @@
         </div>
       </div>
       <reply-box
-        v-on-clickaway="closePopoutReplyBox"
         :conversation-id="currentChat.id"
         :is-a-tweet="isATweet"
         :selected-tweet="selectedTweet"
@@ -107,7 +108,6 @@ import inboxMixin from 'shared/mixins/inboxMixin';
 import { calculateScrollTop } from './helpers/scrollTopCalculationHelper';
 import { isEscape } from 'shared/helpers/KeyboardHelpers';
 import eventListenerMixins from 'shared/mixins/eventListenerMixins';
-import { mixin as clickaway } from 'vue-clickaway';
 
 export default {
   components: {
@@ -115,7 +115,7 @@ export default {
     ReplyBox,
     Banner,
   },
-  mixins: [conversationMixin, inboxMixin, eventListenerMixins, clickaway],
+  mixins: [conversationMixin, inboxMixin, eventListenerMixins],
   props: {
     isContactPanelOpen: {
       type: Boolean,
@@ -213,6 +213,10 @@ export default {
 
     isATweet() {
       return this.conversationType === 'tweet';
+    },
+
+    hasInstagramStory() {
+      return this.conversationType === 'instagram_direct_message';
     },
 
     selectedTweet() {

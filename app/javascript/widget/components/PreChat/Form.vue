@@ -5,12 +5,13 @@
   >
     <div
       v-if="shouldShowHeaderMessage"
-      class="text-black-800 text-sm leading-5"
+      class="text-sm leading-5"
+      :class="$dm('text-black-800', 'dark:text-slate-50')"
     >
       {{ headerMessage }}
     </div>
     <form-input
-      v-if="options.requireEmail"
+      v-if="areContactFieldsVisible"
       v-model="fullName"
       class="mt-5"
       :label="$t('PRE_CHAT_FORM.FIELDS.FULL_NAME.LABEL')"
@@ -21,7 +22,7 @@
       "
     />
     <form-input
-      v-if="options.requireEmail"
+      v-if="areContactFieldsVisible"
       v-model="emailAddress"
       class="mt-5"
       :label="$t('PRE_CHAT_FORM.FIELDS.EMAIL_ADDRESS.LABEL')"
@@ -64,6 +65,7 @@ import { getContrastingTextColor } from '@chatwoot/utils';
 import { required, minLength, email } from 'vuelidate/lib/validators';
 import { isEmptyObject } from 'widget/helpers/utils';
 import routerMixin from 'widget/mixins/routerMixin';
+import darkModeMixin from 'widget/mixins/darkModeMixin';
 export default {
   components: {
     FormInput,
@@ -71,11 +73,15 @@ export default {
     CustomButton,
     Spinner,
   },
-  mixins: [routerMixin],
+  mixins: [routerMixin, darkModeMixin],
   props: {
     options: {
       type: Object,
       default: () => ({}),
+    },
+    disableContactFields: {
+      type: Boolean,
+      default: false,
     },
   },
   validations() {
@@ -99,7 +105,7 @@ export default {
     if (this.hasActiveCampaign) {
       return identityValidations;
     }
-    if (this.options.requireEmail) {
+    if (this.areContactFieldsVisible) {
       return {
         ...identityValidations,
         ...messageValidation,
@@ -134,6 +140,9 @@ export default {
         return this.$t('PRE_CHAT_FORM.CAMPAIGN_HEADER');
       }
       return this.options.preChatMessage;
+    },
+    areContactFieldsVisible() {
+      return this.options.requireEmail && !this.disableContactFields;
     },
   },
   methods: {
