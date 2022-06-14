@@ -106,6 +106,10 @@ const getters = {
   getJiraTicketResponse: state => {
     return state.jiraResponse.jiraTicketResponse;
   },
+
+  getConversationLastSeen: _state => {
+    return _state.conversationLastSeen;
+  },
 };
 
 export default getters;

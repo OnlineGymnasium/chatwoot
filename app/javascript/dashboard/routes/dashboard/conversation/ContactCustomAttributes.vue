@@ -10,8 +10,7 @@
       </div>
       <div>
         <span
-          class="column-scoped"
-          v-html="valueWithLink(customAttributes[attribute])"
+          v-dompurify-html="valueWithLink(customAttributes[attribute])"
         ></span>
       </div>
     </div>
