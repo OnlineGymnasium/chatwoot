@@ -1,5 +1,5 @@
 # pre-build stage
-FROM ruby:3.0.2-alpine AS pre-builder
+FROM ruby:3.0.4-alpine AS pre-builder
 
 # ARG default to production settings
 # For development docker-compose file overrides ARGS
@@ -66,7 +66,7 @@ RUN rm -rf /gems/ruby/3.0.0/cache/*.gem \
   && find /gems/ruby/3.0.0/gems/ \( -name "*.c" -o -name "*.o" \) -delete
 
 # final build stage
-FROM ruby:3.0.2-alpine
+FROM ruby:3.0.4-alpine
 
 ARG BUNDLE_WITHOUT="development:test"
 ENV BUNDLE_WITHOUT ${BUNDLE_WITHOUT}
@@ -85,16 +85,16 @@ ARG RAILS_ENV=production
 ENV RAILS_ENV ${RAILS_ENV}
 ENV BUNDLE_PATH="/gems"
 
-RUN apk add --update --no-cache \
-    openssl \
-    tzdata \
-    postgresql-client \
-    imagemagick \
-    git \
+RUN apk add --no-cache \
+  openssl \
+  tzdata \
+  postgresql-client \
+  imagemagick \
+  git \
   && gem install bundler
 
 RUN if [ "$RAILS_ENV" != "production" ]; then \
-  apk add nodejs yarn; \
+  apk add --no-cache nodejs yarn; \
   fi
 
 COPY --from=pre-builder /gems/ /gems/
